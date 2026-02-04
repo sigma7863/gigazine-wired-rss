@@ -1,29 +1,87 @@
-# Astro Starter Kit: Minimal
+# RSS Reader
 
-```sh
-bun create astro@latest -- --template minimal
-```
+日本の人気テックメディアのRSSフィードをまとめて読めるWebアプリケーションです。
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🚀 機能
 
-## 🚀 Project Structure
+- **複数RSSフィード対応**: Gigazine、Wired Japan、Forbes Japanのフィードを表示
+- **タブ切り替え**: シンプルなタブUIでフィードを切り替え
+- **レスポンシブデザイン**: モバイルとデスクトップの両方に対応
+- **リアルタイム更新**: RSSフィードをリアルタイムで取得
 
-Inside of your Astro project, you'll see the following folders and files:
+## � 技術スタック
+
+- **Astro**: フレームワーク
+- **TypeScript**: 型安全な開発
+- **Tailwind CSS**: スタイリング
+- **RSS Parser**: RSSフィードの解析
+
+## 📁 プロジェクト構造
 
 ```text
 /
 ├── public/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/
+│   │   ├── FeedCard.astro     # 個別記事カード
+│   │   └── FeedColumn.astro   # フィードカラム
+│   ├── pages/
+│   │   └── index.astro        # メインページ
+│   └── utils/
+│       └── rss.ts             # RSS取得ロジック
+├── package.json
+└── README.md
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🚀 使い方
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### インストール
 
-Any static assets, like images, can be placed in the `public/` directory.
+```bash
+bun install
+```
+
+### 開発サーバーの起動
+
+```bash
+bun dev
+```
+
+### ビルド
+
+```bash
+bun build
+```
+
+### プレビュー
+
+```bash
+bun preview
+```
+
+## 📡 対応RSSフィード
+
+- **Gigazine**: https://gigazine.net/news/rss_2.0/
+- **Wired Japan**: https://wired.jp/feed/rss
+- **Forbes Japan**: https://forbesjapan.com/RSS/newspicks.xml
+
+## 🎨 デザイン
+
+- モダンでクリーンなUI
+- タブベースのナビゲーション
+- カードレイアウトで記事を表示
+- ホバー効果とスムーズなトランジション
+
+## 🔧 カスタマイズ
+
+新しいRSSフィードを追加する場合：
+
+1. `src/utils/rss.ts` の `RSS_URLS` に新しいURLを追加
+2. `src/pages/index.astro` でフィードを取得して `feeds` 配列に追加
+
+## ライセンス
+
+MIT License
 
 ## 🧞 Commands
 
