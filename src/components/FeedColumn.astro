@@ -1,0 +1,29 @@
+---
+import FeedCard from './FeedCard.astro';
+import type { RSSFeed } from '../utils/rss';
+
+export interface Props {
+  feed: RSSFeed;
+  siteName: string;
+}
+
+const { feed, siteName } = Astro.props;
+---
+
+<section class="feed-container">
+  <header class="sticky top-0 bg-white border-b border-gray-200 p-4 z-10">
+    <h2 class="text-lg font-bold text-gray-900">{siteName}</h2>
+    <p class="text-sm text-gray-600">{feed.title}</p>
+  </header>
+  
+  <div class="divide-y divide-gray-100">
+    {feed.items.map((item) => (
+      <FeedCard 
+        title={item.title}
+        link={item.link}
+        pubDate={item.pubDate}
+        content={item.contentSnippet}
+      />
+    ))}
+  </div>
+</section>

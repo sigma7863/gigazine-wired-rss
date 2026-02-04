@@ -1,0 +1,37 @@
+---
+import FeedColumn from '../components/FeedColumn.astro';
+import { fetchRSSFeed, RSS_URLS } from '../utils/rss';
+
+export const prerender = false;
+
+// RSSフィードを並列取得
+const [gigazineFeed, wiredFeed, forbesFeed] = await Promise.all([
+  fetchRSSFeed(RSS_URLS.gigazine),
+  fetchRSSFeed(RSS_URLS.wired),
+  fetchRSSFeed(RSS_URLS.forbes)
+]);
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>RSS Reader - Gigazine, Wired, Forbes</title>
+	</head>
+	<body class="h-screen overflow-hidden bg-gray-50">
+		<header class="bg-white border-b border-gray-200 px-6 py-4">
+			<h1 class="text-2xl font-bold text-gray-900">RSS Reader</h1>
+			<p class="text-sm text-gray-600">Gigazine / Wired / Forbes</p>
+		</header>
+		
+		<main class="h-[calc(100vh-73px)]">
+			<div class="grid grid-cols-1 md:grid-cols-3 h-full">
+				<FeedColumn feed={gigazineFeed} siteName="Gigazine" />
+				<FeedColumn feed={wiredFeed} siteName="Wired Japan" />
+				<FeedColumn feed={forbesFeed} siteName="Forbes Japan" />
+			</div>
+		</main>
+	</body>
+</html>
