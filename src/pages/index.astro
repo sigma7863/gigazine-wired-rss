@@ -10,6 +10,12 @@ const [gigazineFeed, wiredFeed, forbesFeed] = await Promise.all([
   fetchRSSFeed(RSS_URLS.wired),
   fetchRSSFeed(RSS_URLS.forbes)
 ]);
+
+const feeds = [
+  { name: 'Gigazine', data: gigazineFeed },
+  { name: 'Wired Japan', data: wiredFeed },
+  { name: 'Forbes Japan', data: forbesFeed }
+];
 ---
 
 <html lang="ja">
@@ -22,16 +28,69 @@ const [gigazineFeed, wiredFeed, forbesFeed] = await Promise.all([
 	</head>
 	<body class="h-screen overflow-hidden bg-gray-50">
 		<header class="bg-white border-b border-gray-200 px-6 py-4">
-			<h1 class="text-2xl font-bold text-gray-900">RSS Reader</h1>
-			<p class="text-sm text-gray-600">Gigazine / Wired / Forbes</p>
+			<h1 class="text-2xl font-bold text-gray-900 mb-4">RSS Reader</h1>
+			
+			<!-- 切り替えボタン -->
+			<nav class="flex gap-2 flex-wrap">
+				{feeds.map((feed, index) => (
+					<button 
+						class="feed-tab px-4 py-2 rounded-lg font-medium transition-colors"
+						data-feed-index={index}
+						data-feed-name={feed.name}
+					>
+						{feed.name}
+					</button>
+				))}
+			</nav>
 		</header>
 		
-		<main class="h-[calc(100vh-73px)]">
-			<div class="grid grid-cols-1 md:grid-cols-3 h-full">
-				<FeedColumn feed={gigazineFeed} siteName="Gigazine" />
-				<FeedColumn feed={wiredFeed} siteName="Wired Japan" />
-				<FeedColumn feed={forbesFeed} siteName="Forbes Japan" />
-			</div>
+		<main class="h-[calc(100vh-140px)]">
+			<!-- RSSフィードコンテナ -->
+			{feeds.map((feed, index) => (
+				<div class="feed-panel h-full" data-feed-panel={index}>
+					<FeedColumn feed={feed.data} siteName={feed.name} />
+				</div>
+			))}
 		</main>
+		
+		<script>
+			// 初期状態：最初のフィードを表示
+			let currentFeed = 0;
+			
+			// パネルとタブの要素を取得
+			const panels = document.querySelectorAll('.feed-panel');
+			const tabs = document.querySelectorAll('.feed-tab');
+			
+			// 初期状態を設定
+			function initializeFeed() {
+				panels.forEach((panel, index) => {
+					panel.style.display = index === currentFeed ? 'block' : 'none';
+				});
+				
+				tabs.forEach((tab, index) => {
+					if (index === currentFeed) {
+						tab.classList.add('bg-blue-600', 'text-white');
+						tab.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+					} else {
+						tab.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+						tab.classList.remove('bg-blue-600', 'text-white');
+					}
+				});
+			}
+			
+			// フィード切り替え関数
+			function switchFeed(index) {
+				currentFeed = index;
+				initializeFeed();
+			}
+			
+			// タブクリックイベント
+			tabs.forEach((tab, index) => {
+				tab.addEventListener('click', () => switchFeed(index));
+			});
+			
+			// 初期化
+			initializeFeed();
+		</script>
 	</body>
 </html>
